@@ -24,6 +24,11 @@ public class EmprestimoController {
     @Autowired
     private LivroService livroService;
 
+    @GetMapping(path = "admin/emprestimo/")
+    public ResponseEntity<?> getAll() {
+        return new ResponseEntity<>(emprestimoService.findAll(), HttpStatus.OK);
+    }
+
     @PostMapping(path = "admin/emprestimo/{livroId}/emprestar")
     public ResponseEntity<?> emprestarLivro(@PathVariable(name = "livroId") Long id,
                                                 @RequestBody Emprestimo emprestimo) {
