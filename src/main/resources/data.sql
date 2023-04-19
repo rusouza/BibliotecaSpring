@@ -1,3 +1,5 @@
-insert into Emprestimo(login, dataEmprestimo, dataEntrega) values('login', '21-12-2022', '21-12-2022');
-insert into Livro values('teste', 'teste', 1);
-insert into Livro values('teste2', 'teste2', 1);
+insert into Usuario (id,login,senha,nome,is_admin) values(1,'rusouza','$2a$10$bAVmnAzfrOkV.I4Ua7hTFOCZ8i2WKuo8MoMHWHfckiKHNgQubc1wK', 'Ruggeri', 0)
+insert into Usuario (id,login,senha,nome,is_admin) values(2,'admin','$2a$10$gchBxoSrNJUnuO9b.UaWe.Teai35/2klLj5EOpUI4Y238kboTgQEa', 'Administrador', 1)
+insert into Livro (id,titulo,autor) values(1,'A arte da guerra','Sun Tzu')
+insert into Livro (id,titulo,autor) values(2,'Harry Potter e a Pedra Filosofal','J.K. Rowling')
+insert into Livro (id,titulo,autor) values(3,'Neuromancer','William Gibson')

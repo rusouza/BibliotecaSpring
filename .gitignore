@@ -31,8 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-.mvn/
-.gitignore.bak
-mvnw
-mvnw.cmd
-pom.xml.bak
