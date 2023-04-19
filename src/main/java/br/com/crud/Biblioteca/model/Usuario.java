@@ -2,7 +2,6 @@ package br.com.crud.Biblioteca.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
 
 @Entity
 public class Usuario {
@@ -21,6 +20,7 @@ public class Usuario {
     @NotEmpty
     private String nome;
 
+    @Column(name = "is_admin")
     private boolean isAdmin;
 
     public Long getId() {

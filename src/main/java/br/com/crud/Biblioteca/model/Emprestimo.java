@@ -18,13 +18,14 @@ public class Emprestimo {
     private String login;
 
     @NotNull
-    @Column(name = "dataEmprestimo")
     private String dataEmprestimo;
 
     @NotNull
     private String dataEntrega;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "emprestimo")
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "emprestimo_id")
+    @JsonIgnore
     private List<Livro> livros;
 
     public Emprestimo() {
