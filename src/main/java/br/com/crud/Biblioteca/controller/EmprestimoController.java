@@ -24,7 +24,7 @@ public class EmprestimoController {
     @Autowired
     private LivroService livroService;
 
-    @GetMapping(path = "admin/emprestimo/")
+    @GetMapping(path = "admin/emprestimo")
     public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(emprestimoService.findAll(), HttpStatus.OK);
     }
@@ -46,11 +46,8 @@ public class EmprestimoController {
 
         Optional<Livro> livro = Optional.ofNullable(livroService.findById(livroId));
         livro.orElseThrow(() -> new ResourceNotFoundException());
+        System.out.println(emprestimo.getLivros());
 
-        for (Livro l: emprestimo.getLivros()) {
-            if (l.getId().equals(livro.get().getId()))
-                emprestimo.getLivros().remove(livro);
-        }
         return new ResponseEntity<>(emprestimoService.devolverLivro(emprestimo), HttpStatus.OK);
     }
 }

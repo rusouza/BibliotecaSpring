@@ -1,10 +1,6 @@
 package br.com.crud.Biblioteca.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -13,10 +9,14 @@ public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+
     private String titulo;
-    @NotNull
+
     private String autor;
+
+    @ManyToOne
+    @JoinColumn(name = "id_emprestimo", referencedColumnName = "id")
+    private Emprestimo fkEmprestimo;
 
     public Livro() {
     }
@@ -49,6 +49,14 @@ public class Livro {
 
     public void setAutor(String autor) {
         this.autor = autor;
+    }
+
+    public Emprestimo getEmprestimo() {
+        return fkEmprestimo;
+    }
+
+    public void setEmprestimo(Emprestimo fkEmprestimo) {
+        this.fkEmprestimo = fkEmprestimo;
     }
 
     @Override

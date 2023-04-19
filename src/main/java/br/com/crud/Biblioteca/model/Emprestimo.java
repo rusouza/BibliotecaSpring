@@ -1,9 +1,6 @@
 package br.com.crud.Biblioteca.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,18 +11,13 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private String login;
 
-    @NotNull
     private String dataEmprestimo;
 
-    @NotNull
     private String dataEntrega;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "emprestimo_id")
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkEmprestimo")
     private List<Livro> livros;
 
     public Emprestimo() {
