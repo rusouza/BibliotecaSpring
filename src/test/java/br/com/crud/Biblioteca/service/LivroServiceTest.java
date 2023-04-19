@@ -25,6 +25,7 @@ class LivroServiceTest {
     public static final Long ID = 3L;
     public static final String TITULO = "Neuromancer";
     public static final String AUTOR = "William Gibson";
+    public static final String NAO_ENCONTRADO = "Não Encontrado";
     @InjectMocks
     private LivroService service;
     @Mock
@@ -57,13 +58,14 @@ class LivroServiceTest {
 
     @Test
     void whenFindByTituloThenReturnResourceNotFoundException() {
-        when(livroRepository.findById(Mockito.anyLong())).thenThrow(new ResourceNotFoundException("Não Encontrado"));
+
+        when(livroRepository.findById(Mockito.anyLong())).thenThrow(new ResourceNotFoundException(NAO_ENCONTRADO));
 
         try{
             service.findById(ID);
         } catch(Exception ex) {
             assertEquals(ResourceNotFoundException.class, ex.getClass());
-            assertEquals("Não Encontrado", ex.getMessage());
+            assertEquals(NAO_ENCONTRADO, ex.getMessage());
         }
     }
 
