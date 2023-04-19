@@ -1,10 +1,10 @@
 package br.com.crud.Biblioteca.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
@@ -18,20 +18,13 @@ public class Livro {
     @NotNull
     private String autor;
 
-    @ManyToOne
-    @JoinColumn(name = "emprestimoId")
-    @JsonIgnore
-    private Emprestimo emprestimo;
-
-    public Emprestimo getEmprestimo() {
-        return emprestimo;
-    }
-
-    public void setEmprestimo(Emprestimo emprestimo) {
-        this.emprestimo = emprestimo;
-    }
-
     public Livro() {
+    }
+
+    public Livro(Long id, String titulo, String autor) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
     }
 
     public Long getId() {
@@ -64,11 +57,6 @@ public class Livro {
         if (o == null || getClass() != o.getClass()) return false;
         Livro livro = (Livro) o;
         return Objects.equals(id, livro.id) && Objects.equals(titulo, livro.titulo) && Objects.equals(autor, livro.autor);
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     @Override
