@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,24 +27,33 @@ public class EmprestimoController {
         return new ResponseEntity<>(emprestimoService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping(path = "admin/emprestimo/findByUsuario/{userName}")
+    public ResponseEntity<?> getEmprestimoByUsuario(@PathVariable(name = "userName") String userName) {
+        return new ResponseEntity<>(emprestimoService.findByUserName(userName), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "admin/emprestimo/findByDataDevolucao/{userName}")
+    public ResponseEntity<?> getAllEmprestimoNaoDevolvido(@PathVariable(name = "userName") String userName) {
+        return new ResponseEntity<>(emprestimoService.findByDataEntrega(userName, false), HttpStatus.OK);
+    }
+
     @PostMapping(path = "admin/emprestimo/{livroId}/emprestar")
     public ResponseEntity<?> emprestarLivro(@PathVariable(name = "livroId") Long id,
                                                 @RequestBody Emprestimo emprestimo) {
+
         Livro livro = livroService.findById(id);
-        List<Livro> listLivro = new ArrayList<>();
-        listLivro.add(livro);
-        emprestimo.setLivros(listLivro);
+        emprestimo.setLivro(livro);
+
         return new ResponseEntity<>(emprestimoService.emprestarLivro(emprestimo), HttpStatus.OK);
     }
 
-    @PutMapping(path = "admin/emprestimo/{livroId}/devolver/{id}")
+    @PutMapping(path = "admin/emprestimo/{livroId}/devolver")
     public ResponseEntity<?> devolverLivro(@PathVariable(name = "livroId") Long livroId,
-                                           @PathVariable(name = "id") Long id,
                                            @RequestBody Emprestimo emprestimo) {
 
         Optional<Livro> livro = Optional.ofNullable(livroService.findById(livroId));
         livro.orElseThrow(() -> new ResourceNotFoundException());
-        System.out.println(emprestimo.getLivros());
+        emprestimo.setLivro(livro.get());
 
         return new ResponseEntity<>(emprestimoService.devolverLivro(emprestimo), HttpStatus.OK);
     }

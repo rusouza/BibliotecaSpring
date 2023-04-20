@@ -1,7 +1,13 @@
 package br.com.crud.Biblioteca.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
 import javax.persistence.*;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -13,12 +19,21 @@ public class Emprestimo {
 
     private String login;
 
-    private String dataEmprestimo;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate dataEmprestimo;
 
-    private String dataEntrega;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate dataDevolucao;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkEmprestimo")
-    private List<Livro> livros;
+    private boolean isDevolvido;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "livro_id")
+    private Livro livro;
 
     public Emprestimo() {
     }
@@ -39,28 +54,36 @@ public class Emprestimo {
         this.login = login;
     }
 
-    public String getDataEmprestimo() {
+    public LocalDate getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(String dataEmprestimo) {
+    public void setDataEmprestimo(LocalDate dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public String getDataEntrega() {
-        return dataEntrega;
+    public LocalDate getDataDevolucao() {
+        return dataDevolucao;
     }
 
-    public void setDataEntrega(String dataEntrega) {
-        this.dataEntrega = dataEntrega;
+    public void setDataDevolucao(LocalDate dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
     }
 
-    public List<Livro> getLivros() {
-        return livros;
+    public boolean isDevolvido() {
+        return isDevolvido;
     }
 
-    public void setLivros(List<Livro> livros) {
-        this.livros = livros;
+    public void setDevolvido(boolean devolvido) {
+        isDevolvido = devolvido;
+    }
+
+    public Livro getLivro() {
+        return livro;
+    }
+
+    public void setLivro(Livro livro) {
+        this.livro = livro;
     }
 
     @Override
@@ -68,11 +91,11 @@ public class Emprestimo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Emprestimo that = (Emprestimo) o;
-        return Objects.equals(id, that.id) && Objects.equals(login, that.login) && Objects.equals(dataEmprestimo, that.dataEmprestimo) && Objects.equals(dataEntrega, that.dataEntrega) && Objects.equals(livros, that.livros);
+        return isDevolvido == that.isDevolvido && id.equals(that.id) && login.equals(that.login) && dataEmprestimo.equals(that.dataEmprestimo) && dataDevolucao.equals(that.dataDevolucao) && livro.equals(that.livro);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, dataEmprestimo, dataEntrega, livros);
+        return Objects.hash(id, login, dataEmprestimo, dataDevolucao, isDevolvido, livro);
     }
 }

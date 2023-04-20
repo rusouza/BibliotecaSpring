@@ -14,10 +14,6 @@ public class Livro {
 
     private String autor;
 
-    @ManyToOne
-    @JoinColumn(name = "id_emprestimo", referencedColumnName = "id")
-    private Emprestimo fkEmprestimo;
-
     public Livro() {
     }
 
@@ -49,14 +45,6 @@ public class Livro {
 
     public void setAutor(String autor) {
         this.autor = autor;
-    }
-
-    public Emprestimo getEmprestimo() {
-        return fkEmprestimo;
-    }
-
-    public void setEmprestimo(Emprestimo fkEmprestimo) {
-        this.fkEmprestimo = fkEmprestimo;
     }
 
     @Override
