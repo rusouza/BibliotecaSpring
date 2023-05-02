@@ -1,8 +1,7 @@
-package br.com.crud.Biblioteca.config;
+package br.com.crud.biblioteca.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AutenticacaoService AutenticacaoService;
+    private AutenticacaoService autenticacaoService;
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -25,6 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(AutenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
     }
 }

@@ -1,8 +1,7 @@
-package br.com.crud.Biblioteca.controller;
+package br.com.crud.biblioteca.controller;
 
-import br.com.crud.Biblioteca.model.Livro;
-import br.com.crud.Biblioteca.model.Usuario;
-import br.com.crud.Biblioteca.service.UsuarioService;
+import br.com.crud.biblioteca.model.Usuario;
+import br.com.crud.biblioteca.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping(path = "cadastro")
-    public ResponseEntity<?> insert(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> insert(@RequestBody Usuario usuario) {
         usuario.setSenha(encriptarSenha(usuario.getSenha()));
         return new ResponseEntity<>(usuarioService.insert(usuario), HttpStatus.OK);
     }

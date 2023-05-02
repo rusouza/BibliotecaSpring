@@ -1,8 +1,8 @@
-package br.com.crud.Biblioteca.service;
+package br.com.crud.biblioteca.service;
 
-import br.com.crud.Biblioteca.error.ResourceNotFoundException;
-import br.com.crud.Biblioteca.model.Livro;
-import br.com.crud.Biblioteca.repository.LivroRepository;
+import br.com.crud.biblioteca.error.ResourceNotFoundException;
+import br.com.crud.biblioteca.model.Livro;
+import br.com.crud.biblioteca.repository.LivroRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,15 +17,18 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class LivroServiceTest {
 
     public static final Long ID = 3L;
+    public static final Integer INDEX = 0;
     public static final String TITULO = "Neuromancer";
     public static final String AUTOR = "William Gibson";
     public static final String NAO_ENCONTRADO = "Não Encontrado";
+
     @InjectMocks
     private LivroService service;
     @Mock
@@ -41,7 +44,16 @@ class LivroServiceTest {
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAListOfLivros() {
+        when(livroRepository.findAll()).thenReturn(listaLivros);
+
+        List<Livro> response = service.findAll();
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(Livro.class, response.get(INDEX).getClass());
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(TITULO, response.get(INDEX).getTitulo());
+        assertEquals(AUTOR, response.get(INDEX).getAutor());
     }
 
     @Test
@@ -59,10 +71,9 @@ class LivroServiceTest {
     @Test
     void whenFindByTituloThenReturnResourceNotFoundException() {
 
-        when(livroRepository.findById(Mockito.anyLong())).thenThrow(new ResourceNotFoundException(NAO_ENCONTRADO));
-
+        when(livroRepository.findByTituloIgnoreCaseContaining(Mockito.anyString())).thenThrow(new ResourceNotFoundException(NAO_ENCONTRADO));
         try{
-            service.findById(ID);
+            service.findByTitulo(TITULO);
         } catch(Exception ex) {
             assertEquals(ResourceNotFoundException.class, ex.getClass());
             assertEquals(NAO_ENCONTRADO, ex.getMessage());
@@ -70,11 +81,36 @@ class LivroServiceTest {
     }
 
     @Test
-    void insert() {
+    void whenInsertThenReturnSucess() {
+        when(livroRepository.save(Mockito.any())).thenReturn(livro);
+
+        Livro response = service.insert(livro);
+
+        assertNotNull(response);
+        assertEquals(Livro.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(TITULO, response.getTitulo());
+        assertEquals(AUTOR, response.getAutor());
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnSucess() {
+        when(livroRepository.findById(Mockito.anyLong())).thenReturn(optionalLivro);
+        Mockito.doNothing().when(livroRepository).delete(livro);
+        service.delete(ID);
+        Mockito.verify(livroRepository, times(1)).delete(livro);
+    }
+
+    @Test
+    void whenDeleteWithResourceNotFound() {
+        when(livroRepository.findById(Mockito.anyLong())).thenThrow(new ResourceNotFoundException(NAO_ENCONTRADO));
+
+        try{
+            service.delete(ID);
+        } catch(Exception ex) {
+            assertEquals(ResourceNotFoundException.class, ex.getClass());
+            assertEquals(NAO_ENCONTRADO, ex.getMessage());
+        }
     }
 
     private void startLivro(){

@@ -1,4 +1,4 @@
-package br.com.crud.Biblioteca;
+package br.com.crud.biblioteca;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

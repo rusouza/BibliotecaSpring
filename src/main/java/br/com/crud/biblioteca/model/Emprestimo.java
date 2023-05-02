@@ -1,4 +1,4 @@
-package br.com.crud.Biblioteca.model;
+package br.com.crud.biblioteca.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -34,9 +34,6 @@ public class Emprestimo {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "livro_id")
     private Livro livro;
-
-    public Emprestimo() {
-    }
 
     public Long getId() {
         return id;

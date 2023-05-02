@@ -3,3 +3,4 @@ insert into Usuario (id,login,senha,nome,is_admin) values(2,'admin','$2a$10$gchB
 insert into Livro (id,titulo,autor) values(1,'A arte da guerra','Sun Tzu')
 insert into Livro (id,titulo,autor) values(2,'Harry Potter e a Pedra Filosofal','J.K. Rowling')
 insert into Livro (id,titulo,autor) values(3,'Neuromancer','William Gibson')
+insert into Livro (id,titulo,autor) values(4,'Harry Potter e a Câmara Secreta','J.K. Rowling')

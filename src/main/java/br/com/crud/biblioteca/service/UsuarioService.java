@@ -1,9 +1,8 @@
-package br.com.crud.Biblioteca.service;
+package br.com.crud.biblioteca.service;
 
-import br.com.crud.Biblioteca.error.ResourceNotFoundException;
-import br.com.crud.Biblioteca.model.Livro;
-import br.com.crud.Biblioteca.model.Usuario;
-import br.com.crud.Biblioteca.repository.UsuarioRepository;
+import br.com.crud.biblioteca.error.ResourceNotFoundException;
+import br.com.crud.biblioteca.model.Usuario;
+import br.com.crud.biblioteca.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +20,12 @@ public class UsuarioService {
 
     public Usuario findByid(Long id) {
         Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return usuario.orElseThrow( () -> new ResourceNotFoundException());
+        return usuario.orElseThrow(ResourceNotFoundException::new);
     }
 
     public boolean isLoginExist(String login) {
         Usuario usuario = usuarioRepository.findByLoginIgnoreCaseContaining(login);
-        if(usuario == null)
-            return false;
-        else
-            return true;
+        return usuario != null;
     }
 
     public Usuario insert(Usuario usuario){

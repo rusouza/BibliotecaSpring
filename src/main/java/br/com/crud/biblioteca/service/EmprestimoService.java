@@ -1,8 +1,8 @@
-package br.com.crud.Biblioteca.service;
+package br.com.crud.biblioteca.service;
 
-import br.com.crud.Biblioteca.error.ResourceNotFoundException;
-import br.com.crud.Biblioteca.model.Emprestimo;
-import br.com.crud.Biblioteca.repository.EmprestimoRepository;
+import br.com.crud.biblioteca.error.ResourceNotFoundException;
+import br.com.crud.biblioteca.model.Emprestimo;
+import br.com.crud.biblioteca.repository.EmprestimoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +25,19 @@ public class EmprestimoService {
 
     public Emprestimo findByid(Long id) {
         Optional<Emprestimo> emprestimo = emprestimoRepository.findById(id);
-        return emprestimo.orElseThrow( () -> new ResourceNotFoundException());
+        return emprestimo.orElseThrow(ResourceNotFoundException::new);
     }
 
     public List<Emprestimo> findByUserName(String userName) {
         List<Emprestimo> listEmprestimos = emprestimoRepository.findByLoginIgnoreCaseContaining(userName);
-        if(listEmprestimos.size() == 0)
+        if(listEmprestimos.isEmpty())
             throw new ResourceNotFoundException();
         return listEmprestimos;
     }
 
-    public List<Emprestimo> findByDataEntrega(String nome, boolean isDevolvido) {
-        List<Emprestimo> listEmprestimos = emprestimoRepository.findByLoginAndIsDevolvido(nome,isDevolvido);
-        if(listEmprestimos.size() == 0)
+    public List<Emprestimo> findEmprestimoNaoDevolvido(String nome) {
+        List<Emprestimo> listEmprestimos = emprestimoRepository.findByLoginAndIsDevolvido(nome,false);
+        if(listEmprestimos.isEmpty())
             throw new ResourceNotFoundException();
         return listEmprestimos;
     }

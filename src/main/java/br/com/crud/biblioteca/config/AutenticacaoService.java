@@ -1,7 +1,7 @@
-package br.com.crud.Biblioteca.config;
+package br.com.crud.biblioteca.config;
 
-import br.com.crud.Biblioteca.model.Usuario;
-import br.com.crud.Biblioteca.repository.UsuarioRepository;
+import br.com.crud.biblioteca.model.Usuario;
+import br.com.crud.biblioteca.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -27,9 +27,11 @@ public class AutenticacaoService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String usuario) throws UsernameNotFoundException {
         Optional<Usuario> user = usuarioRepository.findByLogin(usuario);
-        user.orElseThrow( () -> new UsernameNotFoundException("Usuário não encontrado!"));
-        List<GrantedAuthority> authorityListAdmin = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
-        List<GrantedAuthority> authorityListUser = AuthorityUtils.createAuthorityList("ROLE_USER");
-        return new User(user.get().getLogin(), user.get().getSenha(), user.get().isAdmin() ? authorityListAdmin : authorityListUser);
+        if(user.isPresent()){
+            List<GrantedAuthority> authorityListAdmin = AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
+            List<GrantedAuthority> authorityListUser = AuthorityUtils.createAuthorityList("ROLE_USER");
+            return new User(user.get().getLogin(), user.get().getSenha(), user.get().isAdmin() ? authorityListAdmin : authorityListUser);
+        }
+        throw new UsernameNotFoundException("Usuário não encontrado!");
     }
 }

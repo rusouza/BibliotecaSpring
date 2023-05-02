@@ -1,15 +1,16 @@
-package br.com.crud.Biblioteca.controller;
+package br.com.crud.biblioteca.controller;
 
-import br.com.crud.Biblioteca.error.ResourceNotFoundException;
-import br.com.crud.Biblioteca.model.Emprestimo;
-import br.com.crud.Biblioteca.model.Livro;
-import br.com.crud.Biblioteca.service.EmprestimoService;
-import br.com.crud.Biblioteca.service.LivroService;
+import br.com.crud.biblioteca.error.ResourceNotFoundException;
+import br.com.crud.biblioteca.model.Emprestimo;
+import br.com.crud.biblioteca.model.Livro;
+import br.com.crud.biblioteca.service.EmprestimoService;
+import br.com.crud.biblioteca.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,22 +24,22 @@ public class EmprestimoController {
     private LivroService livroService;
 
     @GetMapping(path = "admin/emprestimo")
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<List<Emprestimo>> getAll() {
         return new ResponseEntity<>(emprestimoService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping(path = "admin/emprestimo/findByUsuario/{userName}")
-    public ResponseEntity<?> getEmprestimoByUsuario(@PathVariable(name = "userName") String userName) {
+    public ResponseEntity<List<Emprestimo>> getEmprestimoByUsuario(@PathVariable(name = "userName") String userName) {
         return new ResponseEntity<>(emprestimoService.findByUserName(userName), HttpStatus.OK);
     }
 
     @GetMapping(path = "admin/emprestimo/findByDataDevolucao/{userName}")
-    public ResponseEntity<?> getAllEmprestimoNaoDevolvido(@PathVariable(name = "userName") String userName) {
-        return new ResponseEntity<>(emprestimoService.findByDataEntrega(userName, false), HttpStatus.OK);
+    public ResponseEntity<List<Emprestimo>> getAllEmprestimoNaoDevolvido(@PathVariable(name = "userName") String userName) {
+        return new ResponseEntity<>(emprestimoService.findEmprestimoNaoDevolvido(userName), HttpStatus.OK);
     }
 
     @PostMapping(path = "admin/emprestimo/{livroId}/emprestar")
-    public ResponseEntity<?> emprestarLivro(@PathVariable(name = "livroId") Long id,
+    public ResponseEntity<Emprestimo> emprestarLivro(@PathVariable(name = "livroId") Long id,
                                                 @RequestBody Emprestimo emprestimo) {
 
         Livro livro = livroService.findById(id);
@@ -48,13 +49,14 @@ public class EmprestimoController {
     }
 
     @PutMapping(path = "admin/emprestimo/{livroId}/devolver")
-    public ResponseEntity<?> devolverLivro(@PathVariable(name = "livroId") Long livroId,
+    public ResponseEntity<Emprestimo> devolverLivro(@PathVariable(name = "livroId") Long livroId,
                                            @RequestBody Emprestimo emprestimo) {
 
         Optional<Livro> livro = Optional.ofNullable(livroService.findById(livroId));
-        livro.orElseThrow(() -> new ResourceNotFoundException());
-        emprestimo.setLivro(livro.get());
-
-        return new ResponseEntity<>(emprestimoService.devolverLivro(emprestimo), HttpStatus.OK);
+        if(livro.isPresent()) {
+            emprestimo.setLivro(livro.get());
+            return new ResponseEntity<>(emprestimoService.devolverLivro(emprestimo), HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException();
     }
 }

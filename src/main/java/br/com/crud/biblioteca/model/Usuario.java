@@ -1,4 +1,4 @@
-package br.com.crud.Biblioteca.model;
+package br.com.crud.biblioteca.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
