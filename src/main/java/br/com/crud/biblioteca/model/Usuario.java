@@ -23,6 +23,17 @@ public class Usuario {
     @Column(name = "is_admin")
     private boolean isAdmin;
 
+    public Usuario() {
+    }
+
+    public Usuario(Long id, String login, String senha, String nome, boolean isAdmin) {
+        this.id = id;
+        this.login = login;
+        this.senha = senha;
+        this.nome = nome;
+        this.isAdmin = isAdmin;
+    }
+
     public Long getId() {
         return id;
     }

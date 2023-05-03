@@ -35,6 +35,18 @@ public class Emprestimo {
     @JoinColumn(name = "livro_id")
     private Livro livro;
 
+    public Emprestimo() {
+    }
+
+    public Emprestimo(Long id, String login, LocalDate dataEmprestimo, LocalDate dataDevolucao, boolean isDevolvido, Livro livro) {
+        this.id = id;
+        this.login = login;
+        this.dataEmprestimo = dataEmprestimo;
+        this.dataDevolucao = dataDevolucao;
+        this.isDevolvido = isDevolvido;
+        this.livro = livro;
+    }
+
     public Long getId() {
         return id;
     }
