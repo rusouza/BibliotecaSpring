@@ -1,5 +1,6 @@
 package br.com.crud.biblioteca.controller;
 
+import br.com.crud.biblioteca.dto.EmprestimoDTO;
 import br.com.crud.biblioteca.error.ResourceNotFoundException;
 import br.com.crud.biblioteca.model.Emprestimo;
 import br.com.crud.biblioteca.model.Livro;
@@ -40,8 +41,9 @@ public class EmprestimoController {
 
     @PostMapping(path = "admin/emprestimo/{livroId}/emprestar")
     public ResponseEntity<Emprestimo> emprestarLivro(@PathVariable(name = "livroId") Long id,
-                                                @RequestBody Emprestimo emprestimo) {
+                                                @RequestBody EmprestimoDTO dto) {
 
+        Emprestimo emprestimo = dto.converterParaEmprestimo();
         Livro livro = livroService.findById(id);
         emprestimo.setLivro(livro);
 
@@ -50,8 +52,9 @@ public class EmprestimoController {
 
     @PutMapping(path = "admin/emprestimo/{livroId}/devolver")
     public ResponseEntity<Emprestimo> devolverLivro(@PathVariable(name = "livroId") Long livroId,
-                                           @RequestBody Emprestimo emprestimo) {
+                                           @RequestBody EmprestimoDTO dto) {
 
+        Emprestimo emprestimo = dto.converterParaEmprestimo();
         Optional<Livro> livro = Optional.ofNullable(livroService.findById(livroId));
         if(livro.isPresent()) {
             emprestimo.setLivro(livro.get());

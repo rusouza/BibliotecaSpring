@@ -3,8 +3,8 @@ package br.com.crud.biblioteca.service;
 import br.com.crud.biblioteca.model.Emprestimo;
 import br.com.crud.biblioteca.model.Livro;
 import br.com.crud.biblioteca.repository.EmprestimoRepository;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -16,8 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -41,6 +43,7 @@ class EmprestimoServiceTest {
     private Livro livro;
     private List<Emprestimo> listaEmprestimo;
     private Optional<Emprestimo>  optionalEmprestimo;
+    private DateTimeFormatter formatter;
 
     @InjectMocks
     private EmprestimoService service;
@@ -52,22 +55,58 @@ class EmprestimoServiceTest {
     }
 
     @Test
-    void whenFindAllThenReturnAlistOfEmprestimos(){
+    void whenFindAllThenReturnAlistOfEmprestimos() {
+
         when(repository.findAll()).thenReturn(listaEmprestimo);
 
         List<Emprestimo> response = repository.findAll();
 
-        assertNull(response);
+        assertNotNull(response);
         assertEquals(1, response.size());
         assertEquals(Emprestimo.class, response.get(INDEX).getClass());
         assertEquals(ID, response.get(INDEX).getId());
         assertEquals(LOGIN, response.get(INDEX).getLogin());
-        assertEquals(DATA_EMPRESTIMO, response.get(INDEX).getDataEmprestimo().toString());
+        assertEquals(DATA_EMPRESTIMO, response.get(INDEX).getDataEmprestimo().format(formatter));
+        assertEquals(DATA_DEVOLUCAO, response.get(INDEX).getDataDevolucao().format(formatter));
+        assertEquals(IS_DEVOLVIDO, response.get(INDEX).isDevolvido());
+        assertEquals(livro, response.get(INDEX).getLivro());
     }
 
+    @Test
+    void whenFindByIdThenReturnAInstancOfEmprestimo() {
+
+        when(repository.findById(anyLong())).thenReturn(optionalEmprestimo);
+
+        Optional<Emprestimo> response = repository.findById(ID);
+
+        assertTrue(response.isPresent());
+        assertEquals(Emprestimo.class, response.get().getClass());
+        assertEquals(ID, response.get().getId());
+        assertEquals(LOGIN, response.get().getLogin());
+        assertEquals(DATA_EMPRESTIMO, response.get().getDataEmprestimo().format(formatter));
+        assertEquals(DATA_DEVOLUCAO, response.get().getDataDevolucao().format(formatter));
+        assertEquals(IS_DEVOLVIDO, response.get().isDevolvido());
+        assertEquals(livro, response.get().getLivro());
+    }
+
+    @Test
+    void findByUserName() {
+    }
+
+    @Test
+    void findEmprestimoNaoDevolvido() {
+    }
+
+    @Test
+    void emprestarLivro() {
+    }
+
+    @Test
+    void devolverLivro() {
+    }
 
     private void startEmprestimo(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
         livro = new Livro(ID_LIVRO, TITULO, AUTOR);
         emprestimo = new Emprestimo(ID, LOGIN,

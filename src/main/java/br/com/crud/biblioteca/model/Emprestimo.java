@@ -38,6 +38,14 @@ public class Emprestimo {
     public Emprestimo() {
     }
 
+    public Emprestimo(String login, LocalDate dataEmprestimo, LocalDate dataDevolucao, boolean isDevolvido, Livro livro) {
+        this.login = login;
+        this.dataEmprestimo = dataEmprestimo;
+        this.dataDevolucao = dataDevolucao;
+        this.isDevolvido = isDevolvido;
+        this.livro = livro;
+    }
+
     public Emprestimo(Long id, String login, LocalDate dataEmprestimo, LocalDate dataDevolucao, boolean isDevolvido, Livro livro) {
         this.id = id;
         this.login = login;

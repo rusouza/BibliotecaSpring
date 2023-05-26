@@ -17,6 +17,11 @@ public class Livro {
     public Livro() {
     }
 
+    public Livro(String titulo, String autor) {
+        this.titulo = titulo;
+        this.autor = autor;
+    }
+
     public Livro(Long id, String titulo, String autor) {
         this.id = id;
         this.titulo = titulo;

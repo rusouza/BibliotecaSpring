@@ -1,6 +1,5 @@
 package br.com.crud.biblioteca.service;
 
-import br.com.crud.biblioteca.error.ResourceNotFoundException;
 import br.com.crud.biblioteca.model.Usuario;
 import br.com.crud.biblioteca.repository.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,16 +7,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+@SpringBootTest
 class UsuarioServiceTest {
 
     public static final Long ID = 1L;
@@ -26,6 +27,7 @@ class UsuarioServiceTest {
     public static final String SENHA = "admin";
     public static final boolean IS_ADMIN = true;
     public static final String NOME_UTILIZADO = "Nome de login já utilizado!";
+    public static final String NAO_ENCONTRADO = "Não Encontrado";
 
     @InjectMocks
     private UsuarioService service;
@@ -42,28 +44,26 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void whenFindByIdThenReturnAUserInstance() {
-        when(repository.findById(anyLong())).thenReturn(optionalUser);
+    void whenFindByLoginThenReturnResourceException(){
+        when(repository.findByLoginIgnoreCaseContaining(anyString())).thenThrow(new DataIntegrityViolationException(NOME_UTILIZADO));
+        try {
+            repository.findByLoginIgnoreCaseContaining(LOGIN);
 
-        Optional<Usuario> response = repository.findById(ID);
-
-        assertTrue(response.isPresent());
-        assertEquals(ID, response.get().getId());
-        assertEquals(LOGIN, response.get().getLogin());
-        assertEquals(SENHA, response.get().getSenha());
-        assertEquals(NOME, response.get().getNome());
-        assertEquals(IS_ADMIN, response.get().isAdmin());
+        } catch(Exception ex) {
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals(NOME_UTILIZADO, ex.getMessage());
+        }
     }
 
     @Test
-    void whenLoginExistThenReturnResourceNotFoundException() {
+    void whenInsertThenReturnException() {
 
-        when(repository.findById(anyLong())).thenThrow(new ResourceNotFoundException(NOME_UTILIZADO));
+        when(repository.save(any())).thenThrow(new DataIntegrityViolationException(NOME_UTILIZADO));
 
         try {
-            repository.findById(ID);
+            repository.save(user);
         } catch(Exception ex) {
-            assertEquals(ResourceNotFoundException.class, ex.getClass());
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
             assertEquals(NOME_UTILIZADO, ex.getMessage());
         }
     }

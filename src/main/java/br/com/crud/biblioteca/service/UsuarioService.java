@@ -1,9 +1,9 @@
 package br.com.crud.biblioteca.service;
 
-import br.com.crud.biblioteca.error.ResourceNotFoundException;
 import br.com.crud.biblioteca.model.Usuario;
 import br.com.crud.biblioteca.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,27 +11,21 @@ import java.util.Optional;
 @Service
 public class UsuarioService {
 
-    private UsuarioRepository usuarioRepository;
+    private UsuarioRepository repository;
 
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+        this.repository = usuarioRepository;
     }
 
-    public Usuario findByid(Long id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return usuario.orElseThrow(ResourceNotFoundException::new);
-    }
-
-    public boolean isLoginExist(String login) {
-        Usuario usuario = usuarioRepository.findByLoginIgnoreCaseContaining(login);
-        return usuario != null;
+    private void isLoginExist(Usuario usuario) {
+        Optional<Usuario> user = repository.findByLoginIgnoreCaseContaining(usuario.getLogin());
+        if(user.isPresent() && user.get().getLogin().equals(usuario.getLogin()))
+            throw new DataIntegrityViolationException("Nome de login já utilizado!");
     }
 
     public Usuario insert(Usuario usuario){
-        if(!isLoginExist(usuario.getLogin()))
-            return usuarioRepository.save(usuario);
-        else
-            throw new ResourceNotFoundException("Nome de login já utilizado!");
+        isLoginExist(usuario);
+        return repository.save(usuario);
     }
 }

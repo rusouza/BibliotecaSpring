@@ -26,6 +26,12 @@ public class Usuario {
     public Usuario() {
     }
 
+    public Usuario(String login, String senha, String nome) {
+        this.login = login;
+        this.senha = senha;
+        this.nome = nome;
+    }
+
     public Usuario(Long id, String login, String senha, String nome, boolean isAdmin) {
         this.id = id;
         this.login = login;

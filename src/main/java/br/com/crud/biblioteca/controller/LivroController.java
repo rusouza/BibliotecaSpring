@@ -1,5 +1,6 @@
 package br.com.crud.biblioteca.controller;
 
+import br.com.crud.biblioteca.dto.LivroDTO;
 import br.com.crud.biblioteca.model.Livro;
 import br.com.crud.biblioteca.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,13 @@ public class LivroController {
     }
 
     @PostMapping(path = "admin/livros")
-    public ResponseEntity<Livro> insert(@RequestBody Livro livro) {
+    public ResponseEntity<Livro> insert(@RequestBody LivroDTO dto) {
+        Livro livro = dto.converterParaLivro();
         return new ResponseEntity<>(livroService.insert(livro), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "admin/livros/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         livroService.delete(id);
         return new ResponseEntity<>(ResponseEntity.ok().build(), HttpStatus.OK);
     }
