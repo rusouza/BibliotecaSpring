@@ -5,11 +5,19 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Emprestimo {
 
@@ -35,71 +43,11 @@ public class Emprestimo {
     @JoinColumn(name = "livro_id")
     private Livro livro;
 
-    public Emprestimo() {
-    }
-
     public Emprestimo(String login, LocalDate dataEmprestimo, LocalDate dataDevolucao, boolean isDevolvido, Livro livro) {
         this.login = login;
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
         this.isDevolvido = isDevolvido;
-        this.livro = livro;
-    }
-
-    public Emprestimo(Long id, String login, LocalDate dataEmprestimo, LocalDate dataDevolucao, boolean isDevolvido, Livro livro) {
-        this.id = id;
-        this.login = login;
-        this.dataEmprestimo = dataEmprestimo;
-        this.dataDevolucao = dataDevolucao;
-        this.isDevolvido = isDevolvido;
-        this.livro = livro;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public LocalDate getDataEmprestimo() {
-        return dataEmprestimo;
-    }
-
-    public void setDataEmprestimo(LocalDate dataEmprestimo) {
-        this.dataEmprestimo = dataEmprestimo;
-    }
-
-    public LocalDate getDataDevolucao() {
-        return dataDevolucao;
-    }
-
-    public void setDataDevolucao(LocalDate dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
-    }
-
-    public boolean isDevolvido() {
-        return isDevolvido;
-    }
-
-    public void setDevolvido(boolean devolvido) {
-        isDevolvido = devolvido;
-    }
-
-    public Livro getLivro() {
-        return livro;
-    }
-
-    public void setLivro(Livro livro) {
         this.livro = livro;
     }
 

@@ -2,9 +2,11 @@ package br.com.crud.biblioteca.dto;
 
 import br.com.crud.biblioteca.model.Emprestimo;
 import br.com.crud.biblioteca.model.Livro;
+import lombok.Data;
 
 import java.time.LocalDate;
 
+@Data
 public class EmprestimoDTO {
 
     private String login;
@@ -17,35 +19,4 @@ public class EmprestimoDTO {
         return new Emprestimo(login, dataEmprestimo, dataDevolucao, isDevolvido, livro);
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public LocalDate getDataEmprestimo() {
-        return dataEmprestimo;
-    }
-
-    public void setDataEmprestimo(LocalDate dataEmprestimo) {
-        this.dataEmprestimo = dataEmprestimo;
-    }
-
-    public LocalDate getDataDevolucao() {
-        return dataDevolucao;
-    }
-
-    public void setDataDevolucao(LocalDate dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
-    }
-
-    public boolean isDevolvido() {
-        return isDevolvido;
-    }
-
-    public void setDevolvido(boolean devolvido) {
-        isDevolvido = devolvido;
-    }
 }
